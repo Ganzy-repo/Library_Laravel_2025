@@ -9,6 +9,7 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+        <link href="{{ asset('/style/bootstrap.min.css') }}" rel="stylesheet">
 
         <!-- Styles / Scripts -->
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
@@ -19,35 +20,58 @@
             </style>
         @endif
     </head>
-    <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
-        <div class="container">
-            <h1>Hello</h1>
+    <body>
+        <div class="container shadow mt-4 p-5">
+            <h1>Hello World</h1>
             @if (session("success"))
-            <div class="class">
-                {{ session("success") }}
-            </div>
-            @endif
+                <div class="alert alert-success">
+                    {{ session("success") }}
+                </div>
+            @endif    
             @if ($errors->any())
-            <div class="calss">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                    <li> {{ $error }} </li>
-                    @endforeach
-                </ul>
-            </div>
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
             @endif
-            <form method= "POST">
-                @csrf
-                <input
-                class="form-control"
-                name="category_name"
-                placeholder="Category Name"
-                value="{{ old('category_name') }}"
-                />
-                <button class="btn btn-primary my-2">
-                    Submit
-                </button>
+            <form method="POST" action="/home"> 
+            @csrf
+            <input
+            class="form-control"
+            name="category_name"
+            placeholder="Category Name"
+            value="{{ old('category_name') }}"/>
+            <button class="btn btn-primary my-2">
+                Submit
+            </button>
             </form>
+
+            <div class="my-5">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>NO.</th>
+                            <th>Category Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($datas as $data)
+                        <tr>
+                            <td>{{ $loop->index +1 }}</td>
+                            <td>{{ $data->category_name }}</td>
+                            <td>
+                                <a href="category/{{ $data->id }}">Update</a>
+                                <a href="category/{{ $data->id }}">Delete</a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </body>
 </html>

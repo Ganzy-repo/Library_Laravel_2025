@@ -2,27 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index() 
     {
         $datas = Category::all();
-        return view('welcome');
+        return view('welcome', compact('datas'));
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'category_name' => 'requiredunique:categories,category_name',
-        ]);
+{
+    $request->validate([
+        'category_name' => 'required|unique:categories,category_name',
+    ], [
+        'category_name.required' => "Category is required Bos",
+        'category_name.unique' => "Category tos aya di database bos",
+    ]);
 
-        Category::create([
-            'category_name' => $request->category_name,
-        ]);
+    Category::create([
+        'category_name' => $request->category_name,
+    ]);
 
-        return redirect('/home')->with('success', 'category has been added!');
-    }
+    return redirect("/home")->with("success", "Category has been added!");
+}
 }
